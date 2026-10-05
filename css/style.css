@@ -1,0 +1,279 @@
+:root {
+  --coffee-900: #3e2723;
+  --coffee-700: #6f4e37;
+  --coffee-500: #a67c52;
+  --cream: #faf6f0;
+  --surface: #ffffff;
+  --text: #2b2320;
+  --muted: #6b5f58;
+  --radius: 16px;
+  --shadow-sm: 0 2px 8px rgba(62, 39, 35, 0.10);
+  --shadow-md: 0 10px 24px rgba(62, 39, 35, 0.18);
+}
+
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 5rem;
+}
+
+body {
+  background: var(--cream);
+  color: var(--text);
+  font-family: 'Nunito', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+a:focus-visible {
+  outline: 3px solid var(--coffee-500);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* ===== Header ===== */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: var(--coffee-900);
+  color: #fff;
+  padding-top: env(safe-area-inset-top);
+  box-shadow: var(--shadow-sm);
+}
+
+.nav {
+  max-width: 1100px;
+  margin: auto;
+  padding: 0.9rem 1.25rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.brand {
+  font-size: 1.3rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+}
+
+.nav-links {
+  list-style: none;
+  display: flex;
+  gap: 1.25rem;
+}
+
+.nav-links a {
+  font-weight: 600;
+  opacity: 0.85;
+  transition: opacity 0.2s ease;
+}
+
+.nav-links a:hover {
+  opacity: 1;
+}
+
+/* ===== Layout principal ===== */
+main {
+  max-width: 1100px;
+  margin: auto;
+  padding: 0 1.25rem 3rem;
+}
+
+.hero {
+  text-align: center;
+  padding: clamp(2.5rem, 8vw, 5rem) 0 clamp(1.5rem, 4vw, 2.5rem);
+}
+
+.hero h1 {
+  font-size: clamp(1.8rem, 5vw, 3rem);
+  line-height: 1.2;
+  color: var(--coffee-900);
+  margin-bottom: 0.75rem;
+}
+
+.hero p {
+  max-width: 40ch;
+  margin: auto;
+  color: var(--muted);
+  font-size: clamp(1rem, 2.5vw, 1.15rem);
+}
+
+.section-title {
+  font-size: 1.5rem;
+  color: var(--coffee-700);
+  margin-bottom: 1.25rem;
+}
+
+/* ===== Cuadrícula de cards ===== */
+.container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 260px), 1fr));
+  gap: 1.5rem;
+}
+
+/* ===== Card ===== */
+.card {
+  background: var(--surface);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+@media (hover: hover) {
+  .card:hover {
+    transform: translateY(-6px);
+    box-shadow: var(--shadow-md);
+  }
+}
+
+.card-img {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  display: block;
+  background: #e9dfd3;
+}
+
+.card-body {
+  padding: 1rem 1.25rem 1.25rem;
+}
+
+.card-title {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: var(--coffee-900);
+}
+
+/* ===== Footer ===== */
+.site-footer {
+  text-align: center;
+  color: var(--muted);
+  font-size: 0.9rem;
+  padding: 1.5rem 1.25rem calc(1.5rem + env(safe-area-inset-bottom));
+  border-top: 1px solid rgba(62, 39, 35, 0.12);
+}
+
+/* ===== Móviles pequeños ===== */
+@media (max-width: 480px) {
+  .nav {
+    justify-content: center;
+  }
+}
+
+/* ===== Accesibilidad: menos movimiento ===== */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .card,
+  .nav-links a {
+    transition: none;
+  }
+}
+
+/* ===== Atributo hidden (evita que otros estilos lo anulen) ===== */
+[hidden] {
+  display: none !important;
+}
+
+/* ===== Card como enlace ===== */
+.card {
+  color: inherit;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.card:focus-visible {
+  outline: 3px solid var(--coffee-500);
+  outline-offset: 3px;
+}
+
+/* ===== Pantalla de detalle ===== */
+.detail {
+  max-width: 720px;
+  margin: 0 auto;
+  padding-top: 1.5rem;
+}
+
+.back {
+  display: inline-block;
+  margin-bottom: 1rem;
+  font-weight: 700;
+  color: var(--coffee-700);
+}
+
+.back:hover {
+  text-decoration: underline;
+}
+
+.back:focus-visible {
+  outline: 3px solid var(--coffee-500);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+.detail-img {
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-md);
+  display: block;
+  background: #e9dfd3;
+}
+
+.detail-title {
+  font-size: clamp(1.6rem, 5vw, 2.4rem);
+  color: var(--coffee-900);
+  margin: 1.25rem 0 0.5rem;
+}
+
+.detail-text {
+  color: var(--muted);
+  font-size: 1.05rem;
+}
+
+.detail-subtitle {
+  font-size: 1.1rem;
+  color: var(--coffee-700);
+  margin: 1.5rem 0 0.75rem;
+}
+
+.chips {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.chips li {
+  background: #efe3d3;
+  color: var(--coffee-900);
+  padding: 0.35rem 0.85rem;
+  border-radius: 999px;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.detail-meta {
+  margin-top: 1.5rem;
+  color: var(--text);
+}

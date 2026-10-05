@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Dev Coffee</title>
+  <meta name="description" content="Descubre nuestra selección de cafés.">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="manifest" href="manifest.json">
+
+  <meta name="theme-color" content="#3e2723">
+
+  <!-- iOS -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Dev Coffee">
+  <link rel="apple-touch-icon" href="images/icons/icon-192x192.png">
+</head>
+
+<body>
+  <header class="site-header">
+    <nav class="nav">
+      <a class="brand" href="#inicio">☕ Dev Coffee</a>
+      <ul class="nav-links">
+        <li><a href="#inicio">Inicio</a></li>
+        <li><a href="#menu">Menú</a></li>
+        <li><a href="#contacto">Contacto</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+  <!-- Pantalla 1: lista -->
+  <div id="list-view">
+    <section class="hero" id="inicio">
+      <h1>El mejor café, en tu bolsillo</h1>
+      <p>Explora nuestra selección de cafés preparados con los mejores granos.</p>
+    </section>
+
+    <section id="menu">
+      <h2 class="section-title">Nuestra selección</h2>
+      <div class="container"></div>
+    </section>
+  </div>
+
+  <!-- Pantalla 2: detalle -->
+  <section id="detail-view" hidden></section>
+</main>
+
+  <footer class="site-footer" id="contacto">
+    <p>© 2026 Dev Coffee. Todos los derechos reservados.</p>
+  </footer>
+
+  <script src="javascript/app.js"></script>
+</body>
+</html>
