@@ -1,4 +1,4 @@
-const CACHE_NAME = "dev-coffee-v3";
+const CACHE_NAME = "dev-coffee-v4";
 
 const APP_SHELL = [
   "./",
@@ -26,7 +26,43 @@ const APP_SHELL = [
   "images/icons/icon-512x512.png"
 ];
 
-// 1. Instalación: precachear los archivos base
+/* ===== Estrategias ===== */
+
+// Cache first: responde desde caché; si no existe, va a la red
+async function cacheFirst(request) {
+  const cached = await caches.match(request, { ignoreSearch: true });
+  if (cached) return cached;
+  try {
+    const response = await fetch(request);
+    if (response.ok) {
+      const cache = await caches.open(CACHE_NAME);
+      cache.put(request, response.clone());
+    }
+    return response;
+  } catch {
+    return Response.error();
+  }
+}
+
+// Network first: intenta la red (y actualiza la caché); si falla, usa la caché
+async function networkFirst(request, fallbackUrl) {
+  const cache = await caches.open(CACHE_NAME);
+  try {
+    const response = await fetch(request);
+    if (response.ok) cache.put(request, response.clone());
+    return response;
+  } catch {
+    const cached = await cache.match(request, { ignoreSearch: true });
+    if (cached) return cached;
+    if (fallbackUrl) {
+      const fallback = await cache.match(fallbackUrl);
+      if (fallback) return fallback;
+    }
+    return Response.error();
+  }
+}
+
+/* ===== 1. Instalación: precachear los archivos base ===== */
 self.addEventListener("install", (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => cache.addAll(APP_SHELL))
@@ -34,7 +70,7 @@ self.addEventListener("install", (event) => {
   self.skipWaiting();
 });
 
-// 2. Activación: borrar cachés de versiones anteriores
+/* ===== 2. Activación: borrar cachés de versiones anteriores ===== */
 self.addEventListener("activate", (event) => {
   event.waitUntil(
     caches.keys().then((keys) =>
@@ -48,7 +84,7 @@ self.addEventListener("activate", (event) => {
   self.clients.claim();
 });
 
-// 3. Fetch: decidir de dónde responder
+/* ===== 3. Fetch: decidir de dónde responder ===== */
 self.addEventListener("fetch", (event) => {
   const { request } = event;
 
@@ -66,10 +102,10 @@ self.addEventListener("fetch", (event) => {
         cache.match(request).then((cached) => {
           const network = fetch(request)
             .then((response) => {
-              cache.put(request, response.clone());
+              if (response.ok) cache.put(request, response.clone());
               return response;
             })
-            .catch(() => cached);
+            .catch(() => cached || Response.error());
           return cached || network;
         })
       )
@@ -80,25 +116,16 @@ self.addEventListener("fetch", (event) => {
   // Ignorar otros dominios
   if (url.origin !== self.location.origin) return;
 
-  // Navegación: red primero, caché como respaldo
-  if (request.mode === "navigate") {
-    event.respondWith(
-      fetch(request).catch(() => caches.match("index.html"))
-    );
+  // Navegación, CSS y JS: network first
+  if (
+    request.mode === "navigate" ||
+    request.destination === "style" ||
+    request.destination === "script"
+  ) {
+    event.respondWith(networkFirst(request, "index.html"));
     return;
   }
 
-  // Archivos propios: caché primero, red como respaldo
-  event.respondWith(
-    caches.match(request).then((cached) => {
-      if (cached) return cached;
-      return fetch(request).then((response) => {
-        if (response.ok) {
-          const copy = response.clone();
-          caches.open(CACHE_NAME).then((cache) => cache.put(request, copy));
-        }
-        return response;
-      });
-    })
-  );
+  // Imágenes, iconos y demás archivos propios: cache first
+  event.respondWith(cacheFirst(request));
 });
